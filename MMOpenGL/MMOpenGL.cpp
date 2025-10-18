@@ -1,12 +1,14 @@
-﻿// MMOpenGL.cpp: 定义应用程序的入口点。
-//
+﻿#include <stdio.h>
 
-#include "MMOpenGL.h"
-
-using namespace std;
+//在引用glad和glfw的头文件时，要先引用glad，再引用glfw，因为glfw中依赖了gl相关的东西，gl相关的东西是glad提供的
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 int main()
 {
-	cout << "Hello CMake." << endl;
+	glfwInit();
+	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+	printf("Hello OpenGL");
 	return 0;
 }
