@@ -3,6 +3,9 @@
 //在引用glad和glfw的头文件时，要先引用glad，再引用glfw，因为glfw中依赖了gl相关的东西，gl相关的东西是glad提供的
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <string.h>
+#include <stdlib.h>
+#include "MMGL/MMGL.hpp"
 
 int main()
 {
@@ -28,6 +31,32 @@ int main()
 	//初始化glad
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
+	char* shaderStr = (char*)"";
+
+	MMGLShader * shader = new MMGLShader(shaderStr,MMGLShaderType::MMGL_SHADER_VERTEX);
+
+	//参数 GLenum type 有两种，顶点着色器 GL_VERTEX_SHADER 和 GL_FRAGMENT_SHADER
+	/*GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(shader,1,&shaderStr,NULL);
+	glCompileShader(shader);
+
+	GLint status;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+
+	GLint logLen = 0;//shader产生的日志的长度
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLen);
+
+	if (logLen > 0) { //长度大于0，存在log
+		char* log = (char*)malloc(logLen);
+		glGetShaderInfoLog(shader,logLen,NULL,log);
+
+		printf("%s\n", log);
+
+		free(log);
+	}*/
+
+	//GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+
 	while (!glfwWindowShouldClose(window)) {
 		//todo 绘制操作
 
@@ -35,6 +64,8 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	delete shader;
 
 	//跳出循环后，释放掉glfw的资源
 	glfwTerminate();

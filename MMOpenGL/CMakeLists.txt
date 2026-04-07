@@ -4,6 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 #写一个搜索路径
+include_directories(../)
 include_directories(../3rdpart/glfw/include/)
 include_directories(../3rdpart/glad/include/)
 
@@ -17,5 +18,6 @@ add_executable (MMOpenGL
 				)
 
 target_link_libraries(MMOpenGL glfw3)
+target_link_libraries(MMOpenGL MMGL)
 
 # TODO: 如有需要，请添加测试并安装目标。

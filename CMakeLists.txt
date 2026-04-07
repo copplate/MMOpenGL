@@ -6,4 +6,5 @@ cmake_minimum_required (VERSION 3.8)
 project ("MMOpenGL")
 
 # 包含子项目。
+add_subdirectory ("MMGL")
 add_subdirectory ("MMOpenGL")
