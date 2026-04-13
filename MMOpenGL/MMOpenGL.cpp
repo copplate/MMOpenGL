@@ -33,7 +33,8 @@ int main()
 
 	char* shaderStr = (char*)"";
 
-	MMGLShader * shader = new MMGLShader(shaderStr,MMGLShaderType::MMGL_SHADER_VERTEX);
+	//MMGLShader * shader = new MMGLShader(shaderStr,MMGLShaderType::MMGL_SHADER_VERTEX);
+	MMGLProgram* program = new MMGLProgram(shaderStr, shaderStr);
 
 	//参数 GLenum type 有两种，顶点着色器 GL_VERTEX_SHADER 和 GL_FRAGMENT_SHADER
 	/*GLuint shader = glCreateShader(GL_VERTEX_SHADER);
@@ -65,7 +66,8 @@ int main()
 		glfwPollEvents();
 	}
 
-	delete shader;
+	//delete shader;
+	delete program;
 
 	//跳出循环后，释放掉glfw的资源
 	glfwTerminate();

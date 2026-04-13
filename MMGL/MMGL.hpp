@@ -16,8 +16,17 @@ public:
 	MMGLShader(char * shaderStr, MMGLShaderType type);//shaderStr是Shader的源代码
 	~MMGLShader();
 
-private:
+public:
 	GLuint shader = 0;
 
+};
+
+class MMGLProgram
+{
+public:
+	MMGLProgram(char * vertexShaderStr,char * fragmentShaderStr);
+	~MMGLProgram();
+private:
+	GLuint program = 0;
 };
 

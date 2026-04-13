@@ -12,6 +12,6 @@ add_library (
 		#../3rdpart/glad/src/glad.c #把源码直接拿过来编译，函数都在这个.c文件里实现，这样就能找到所有函数
 		 MMGL.hpp
 		 
-		  "MMGLShader.cpp")
+		  "MMGLShader.cpp" "MMGLProgram.cpp")
 
 

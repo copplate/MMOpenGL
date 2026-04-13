@@ -28,6 +28,7 @@ MMGLShader::MMGLShader(char* shaderStr, MMGLShaderType type)//shaderStr «Shaderµ
 		char* log = (char*)malloc(logLen);
 		glGetShaderInfoLog(shader, logLen, NULL, log);
 
+		printf("Shader Log:\n");
 		printf("%s\n", log);
 
 		free(log);
