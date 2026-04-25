@@ -7,9 +7,12 @@
 #include <stdlib.h>
 #include "MMGL/MMGL.hpp"
 
+#define STRINGIZE(x)   #x
+#define SHADER(shader) "" STRINGIZE(shader)
+
 int main()
 {
-	printf("Hello OpenGL");
+	printf("Hello OpenGL\n");
 	glfwInit();
 
 	//使用的opengl版本是3.3 Core Profile
@@ -31,10 +34,36 @@ int main()
 	//初始化glad
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-	char* shaderStr = (char*)"";
+	//char* shaderStr = (char*)"int main() {}";
+	char* vertexShader = SHADER(
+		#version 330\n
+
+		layout(location = 0) in vec3 pos;
+
+		out vec3 outPos;
+
+		void main() {
+			outPos = pos;
+			gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
+		}
+	);
+	printf("vertexShader:%s\n", vertexShader);
+
+	char* fragmentShader = SHADER(
+		#version 330\n
+
+		out vec4 rgbaColor;
+
+		in vec3 outPos;
+
+		void main() {
+			rgbaColor = vec4(outPos, 1.0);
+	}
+	);
+
 
 	//MMGLShader * shader = new MMGLShader(shaderStr,MMGLShaderType::MMGL_SHADER_VERTEX);
-	MMGLProgram* program = new MMGLProgram(shaderStr, shaderStr);
+	MMGLProgram* program = new MMGLProgram(vertexShader, fragmentShader);
 
 	//参数 GLenum type 有两种，顶点着色器 GL_VERTEX_SHADER 和 GL_FRAGMENT_SHADER
 	/*GLuint shader = glCreateShader(GL_VERTEX_SHADER);
