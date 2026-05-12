@@ -26,6 +26,8 @@ class MMGLProgram
 public:
 	MMGLProgram(char * vertexShaderStr,char * fragmentShaderStr);
 	~MMGLProgram();
+
+	int UseProgram();
 private:
 	GLuint program = 0;
 };
