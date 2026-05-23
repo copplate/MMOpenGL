@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 enum MMGLShaderType
 {
@@ -30,5 +31,20 @@ public:
 	int UseProgram();
 private:
 	GLuint program = 0;
+};
+
+class MMGLVAO
+{
+public:
+	MMGLVAO();
+	~MMGLVAO();
+
+	int AddVertex3D(float * data,int vertexCount,int layout);//每调用一次AddVertex方法，就生成一个VBO
+
+	int BindVAO();
+
+private:
+	GLuint vao = 0;  // VAO的id
+	std::vector<GLuint> vboList;
 };
 
