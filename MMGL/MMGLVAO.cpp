@@ -14,6 +14,11 @@ MMGLVAO::~MMGLVAO()
 	}
 	vboList.clear();
 
+	if (ebo != 0) {
+		glDeleteBuffers(1, &ebo);
+		ebo = 0;
+	}
+
 	if (vao != NULL) {
 		glDeleteVertexArrays(1, &vao);
 		vao = NULL;
@@ -39,8 +44,33 @@ int MMGLVAO::AddVertex3D(float* data, int vertexCount, int layout)//每调用一次Ad
 	return 0;
 }
 
+int MMGLVAO::SetIndex(unsigned int* indexData, int indexCount)
+{
+	glBindVertexArray(vao); //绑定vao
+
+	glGenBuffers(1,&ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indexData,GL_STATIC_DRAW);
+
+	glBindVertexArray(0);//解绑，就是把0号位绑定进来
+
+	drawTime = indexCount;
+
+	return 0;
+}
+
 int MMGLVAO::BindVAO()
 {
 	glBindVertexArray(vao);
 	return 0;
 }
+
+int MMGLVAO::Draw()
+{
+	BindVAO();
+	glDrawElements(GL_TRIANGLES, drawTime,GL_UNSIGNED_INT,0);
+	return 0;
+}
+
+

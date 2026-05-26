@@ -41,10 +41,18 @@ public:
 
 	int AddVertex3D(float * data,int vertexCount,int layout);//每调用一次AddVertex方法，就生成一个VBO
 
+	int SetIndex(unsigned int* indexData, int indexCount);
+
 	int BindVAO();
+
+	int Draw();
 
 private:
 	GLuint vao = 0;  // VAO的id
+	GLuint ebo = 0;
+
+	int drawTime = 0;
+
 	std::vector<GLuint> vboList;
 };
 

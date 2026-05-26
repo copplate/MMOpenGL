@@ -62,13 +62,20 @@ int main()
 	);
 
 	float vertex[] = {
-		0.0f,	1.0f,	0.0f,
+		-1.0f,	1.0f,	0.0f,
+		1.0f,	1.0f,	0.0f,
 		-1.0f,	-1.0f,	0.0f,
-		1.0f,	-1.0f,	0.0f
+		1.0f,	-1.0f,	0.0f,
+	};
+
+	unsigned int index[] = {
+		0,3,1,
+		1,3,2
 	};
 
 	MMGLVAO* vao = new MMGLVAO();
-	vao->AddVertex3D(vertex,3,0);
+	vao->AddVertex3D(vertex,4,0);
+	vao->SetIndex(index,6);
 
 	//MMGLShader * shader = new MMGLShader(shaderStr,MMGLShaderType::MMGL_SHADER_VERTEX);
 	MMGLProgram* program = new MMGLProgram(vertexShader, fragmentShader);
@@ -100,9 +107,9 @@ int main()
 		//在绘制之前要清空画布
 		glClear(GL_COLOR_BUFFER_BIT);//把颜色相关的通道清除掉
 		program->UseProgram();
-		vao->BindVAO();
+		vao->Draw();
 
-		glDrawArrays(GL_TRIANGLES,0,3);
+		//glDrawArrays(GL_TRIANGLES,0,6);
 
 		//todo 之后涉及到双缓冲再来讲glfwSwapBuffers
 		glfwSwapBuffers(window);
