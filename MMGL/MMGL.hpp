@@ -29,8 +29,8 @@ public:
 	~MMGLProgram();
 
 	int UseProgram();
-private:
-	GLuint program = 0;
+public:
+	GLuint program = 0;//programµÄid
 };
 
 class MMGLVAO

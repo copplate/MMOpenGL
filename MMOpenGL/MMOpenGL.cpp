@@ -38,13 +38,18 @@ int main()
 	char* vertexShader = SHADER(
 		#version 330\n
 
+		uniform float a;
+
 		layout(location = 0) in vec3 pos;
 
 		out vec3 outPos;
 
 		void main() {
 			outPos = pos;
-			gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
+
+			float _a = sin(a);
+
+			gl_Position = vec4(pos.x * _a, pos.y * _a, pos.z * _a, 1.0);
 		}
 	);
 	printf("vertexShader:%s\n", vertexShader);
@@ -102,12 +107,20 @@ int main()
 
 	//GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
+
+	float aa = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		//todo 绘制操作
 		//在绘制之前要清空画布
 		glClear(GL_COLOR_BUFFER_BIT);//把颜色相关的通道清除掉
 		program->UseProgram();
+
+		GLuint loc = glGetUniformLocation(program->program,"a");
+		glUniform1f(loc, aa);
+
 		vao->Draw();
+
+		aa += 0.03;
 
 		//glDrawArrays(GL_TRIANGLES,0,6);
 
