@@ -41,13 +41,18 @@ int main()
 		uniform float a;
 
 		layout(location = 0) in vec3 pos;
+		layout(location = 1) in vec3 uvPos;
+
 
 		out vec3 outPos;
+		out vec3 outUVPos;
 
 		void main() {
 			outPos = pos;
+			outUVPos = uvPos;
 
 			float _a = sin(a);
+			_a = 1.0;
 
 			gl_Position = vec4(pos.x * _a, pos.y * _a, pos.z * _a, 1.0);
 		}
@@ -60,17 +65,33 @@ int main()
 		out vec4 rgbaColor;
 
 		in vec3 outPos;
+		in vec3 outUVPos;
 
-		void main() {
-			rgbaColor = vec4(outPos, 1.0);
-	}
+		uniform sampler2D t;//纹理
+
+		void main() 
+		{
+			//纹理坐标
+			vec2 uv = vec2(outUVPos.x, outUVPos.y);
+			vec4 color = texture(t,uv);
+			// rgbaColor = vec4(outPos, 1.0);
+
+			rgbaColor = color;
+		}
 	);
 
 	float vertex[] = {
 		-1.0f,	1.0f,	0.0f,
 		1.0f,	1.0f,	0.0f,
-		-1.0f,	-1.0f,	0.0f,
 		1.0f,	-1.0f,	0.0f,
+		-1.0f,	-1.0f,	0.0f,
+	};
+
+	float vertexUV[] = {
+		0.0f,	1.0f,	0.0f,
+		1.0f,	1.0f,	0.0f,
+		1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,
 	};
 
 	unsigned int index[] = {
@@ -80,6 +101,7 @@ int main()
 
 	MMGLVAO* vao = new MMGLVAO();
 	vao->AddVertex3D(vertex,4,0);
+	vao->AddVertex3D(vertexUV, 4, 1);
 	vao->SetIndex(index,6);
 
 	//MMGLShader * shader = new MMGLShader(shaderStr,MMGLShaderType::MMGL_SHADER_VERTEX);
@@ -108,6 +130,30 @@ int main()
 	//GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
 
+	//RGB  RGB
+	//RGB  RGB
+	int imgWidth = 2;
+	int imgHeight = 2;
+	unsigned char imgData[] = {
+		255,0,0,             0,255,0,
+		0,0,255,             127,127,127
+	};
+
+	GLuint textureId = 0;
+	glGenTextures(1, &textureId);
+
+	glBindTexture(GL_TEXTURE_2D,textureId);
+
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB, imgWidth, imgHeight,0,GL_RGB,GL_UNSIGNED_BYTE, imgData);
+
+
 	float aa = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		//todo 绘制操作
@@ -117,6 +163,12 @@ int main()
 
 		GLuint loc = glGetUniformLocation(program->program,"a");
 		glUniform1f(loc, aa);
+
+		GLuint textureLoc = glGetUniformLocation(program->program,"t");
+		//激活0号纹理单元
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		glUniform1i(textureLoc,0);//0是纹理单元的编号，opengl有32个纹理单元，opengl es有16个纹理单元
 
 		vao->Draw();
 
